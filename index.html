@@ -86,6 +86,8 @@ header{background:rgba(10,14,26,.95);border-bottom:1px solid var(--gold-bd);padd
 .step-line{width:14px;height:1px;background:var(--border);flex-shrink:0;margin:0 2px}
 .step-item.done+.step-line{background:rgba(201,168,76,.35)}
 .step-counter{font-size:10px;font-weight:700;color:var(--gold);background:var(--gold-dim);border:1px solid var(--gold-bd);padding:3px 9px;border-radius:20px;white-space:nowrap;flex-shrink:0}
+.step-home{font-family:var(--font);font-size:10px;font-weight:700;color:var(--gold);background:transparent;border:1px solid var(--gold-bd);padding:3px 9px;border-radius:20px;white-space:nowrap;cursor:pointer;transition:all .2s;flex-shrink:0}
+.step-home:hover{background:var(--gold-dim);color:var(--gold-lt)}
 
 /* ── PHASES ── */
 main{padding:0}
@@ -95,9 +97,9 @@ main{padding:0}
 @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 
 /* ── SPLASH ── */
-.splash-hero{position:relative;background:var(--bg);min-height:calc(100svh - 65px);display:flex;align-items:center;justify-content:center;overflow:hidden;padding:0}
+.splash-hero{position:relative;background:var(--bg);height:calc(100svh - 160px);min-height:0;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:0}
 .splash-pattern{position:absolute;inset:0;pointer-events:none}
-.splash-content{position:relative;z-index:2;padding:24px 20px;text-align:center;max-width:560px;margin:0 auto}
+.splash-content{position:relative;z-index:2;padding:clamp(12px,2.4svh,24px) 20px;text-align:center;max-width:560px;margin:0 auto;max-height:100%;overflow:hidden}
 .splash-tag{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:var(--gold);background:var(--gold-dim);border:1px solid var(--gold-bd);padding:5px 14px;border-radius:20px;margin-bottom:18px;letter-spacing:.4px}
 .splash-title{font-size:clamp(24px,5.2vw,34px);font-weight:700;color:var(--text);line-height:1.2;margin-bottom:12px;letter-spacing:-.5px}
 .splash-title span{color:var(--gold)}
@@ -215,7 +217,7 @@ main{padding:0}
 .cta-outro{text-align:center;margin:0 auto 6px;padding-bottom:0}
 .cta-restart{margin-bottom:10px}
 .cta-logo{margin:2px auto 4px;width:170px;height:60px;background:transparent;overflow:hidden}
-.cta-role{font-size:12px;color:var(--muted);margin:0;line-height:1.5;text-align:center}
+.cta-role{font-size:12px;color:var(--gold);margin:0;line-height:1.5;text-align:center}
 .social-row{display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap}
 .soc{display:flex;align-items:center;gap:5px;text-decoration:none;color:var(--muted);font-size:11px;font-weight:600;direction:ltr;transition:color .2s}
 .soc:hover{color:var(--gold)}
@@ -303,8 +305,8 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding:14px
 }
 
 /* ── METHODOLOGY INTRO ── */
-.splash-methodology{background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.22);border-radius:10px;padding:12px 14px;margin:0 auto 18px;max-width:440px;text-align:right}
-.splash-method-item{display:flex;align-items:flex-start;gap:10px;font-size:12px;color:var(--text-mid);line-height:1.7}
+.splash-methodology{background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.22);border-radius:10px;padding:12px 14px;margin:0 auto 18px;max-width:440px;text-align:center}
+.splash-method-item{display:block;font-size:12px;color:var(--text-mid);line-height:1.7;text-align:center}
 .splash-method-icon{color:var(--gold);font-size:8px;flex-shrink:0;margin-top:5px}
 </style>
 </head>
@@ -331,6 +333,7 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding:14px
 <div class="step-bar" id="stepBar" style="display:none">
   <div class="wrap">
     <div class="step-inner">
+      <button class="step-home" onclick="App.restart()" type="button">↺ البدء من جديد</button>
       <div class="step-list" id="stepList"></div>
       <div class="step-counter" id="stepCounter">المحور 1 من 7</div>
     </div>
@@ -369,11 +372,10 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding:14px
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
         تشخيص احترافي مجاني
       </div>
-      <h1 class="splash-title">هل مشروعك<br><span>محمي أم معرّض للخطر؟</span></h1>
+      <h1 class="splash-title">هل كيانك التجاري<br><span>محمي أم معرّض للمخاطر؟</span></h1>
       <div class="splash-methodology">
         <div class="splash-method-item">
-          <span class="splash-method-icon">◆</span>
-          أداة عملية لفحص صحة الحوكمة في المشاريع والشراكات، مستندة إلى أفضل الممارسات في حوكمة المنشآت وإدارة مخاطر الشراكة.
+          أداة عملية لفحص صحة الحوكمة في المشاريع والشراكات، مستندة إلى أفضل الممارسات في حوكمة المنشآت وإدارة مخاطر الشراكة
         </div>
       </div>
       <button class="splash-cta" onclick="App.start()">ابدأ فحص الحوكمة الآن ←</button>
@@ -770,8 +772,8 @@ const App = {
   radarChart: null,
 
   start() {
-    this.buildAxisPhases();
-    this.buildResultPhase();
+    if(!document.getElementById('ph1')) this.buildAxisPhases();
+    if(!document.getElementById('ph8')) this.buildResultPhase();
     this.go(1);
     document.getElementById('stepBar').style.display = 'block';
     this.updateStepBar();
