@@ -179,6 +179,15 @@ main{padding:0}
 .export-header .eh-name{font-size:13px;color:var(--muted)}
 /* تحييد mix-blend-mode أثناء التصدير حتى لا يختفي الشعار */
 .result-export-area.is-exporting img{mix-blend-mode:normal!important}
+
+/* تسريع الالتقاط: إيقاف الحركات والانتقالات أثناء إنشاء الصورة/PDF */
+.result-export-area.is-exporting *,
+.result-export-area.is-exporting *::before,
+.result-export-area.is-exporting *::after{
+  animation:none!important;
+  transition:none!important;
+  box-shadow:none!important;
+}
 body.exporting-lock{cursor:wait}
 body.exporting-lock .no-export{pointer-events:none}
 /* تحييد letter-spacing و uppercase أثناء التصدير: تباعد الحروف يكسر تشكيل العربية في html2canvas */
@@ -1142,67 +1151,77 @@ const App = {
     }
   },
 
-  async getResultCanvas() {
+  async getResultCanvas(options = {}) {
     const node = document.getElementById('resultExportArea');
     if(!node) throw new Error('لم يتم العثور على منطقة النتيجة.');
     if(!window.html2canvas) throw new Error('مكتبة التقاط الصورة غير متاحة.');
+
+    const mode = options.mode || 'image';
+    // 1080px كان يعطي جودة عالية لكنه ثقيل جداً على الجوال. 820/900 كافية للنص العربي وتقلل زمن الالتقاط بوضوح.
+    const EXPORT_WIDTH = options.width || (mode === 'pdf' ? 900 : 820);
+    const BASE_SCALE = options.scale || (mode === 'pdf' ? 1.25 : 1.15);
+
     if(document.fonts && document.fonts.ready) {
       await Promise.race([
         document.fonts.ready.catch(()=>{}),
-        new Promise(resolve => setTimeout(resolve, 1200))
+        new Promise(resolve => setTimeout(resolve, 450))
       ]);
     }
 
-    // عرض تصدير ثابت 1080 يضمن دقة عالية وتخطيطاً مستقراً ونصاً عربياً سليماً على الجوال
-    const EXPORT_WIDTH = 1080;
     document.body.classList.add('exporting-lock');
     node.classList.add('is-exporting');
     const prevWidth = node.style.width;
     const prevMaxWidth = node.style.maxWidth;
+    const prevScrollX = window.scrollX;
+    const prevScrollY = window.scrollY;
     node.style.width = EXPORT_WIDTH + 'px';
     node.style.maxWidth = EXPORT_WIDTH + 'px';
     if(this.radarChart && typeof this.radarChart.resize === 'function') this.radarChart.resize();
 
-    // التأكد من اكتمال تحميل صور التصدير (مثل شعار الرأس) قبل الالتقاط
-    const imgs = Array.from(node.querySelectorAll('img'));
-    await Promise.all(imgs.map(img => (img.complete && img.naturalWidth)
-      ? Promise.resolve()
-      : new Promise(res => { img.onload = img.onerror = res; })));
-
-    // انتظار استقرار التخطيط واكتمال رسم الرادار قبل الالتقاط
-    await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
-    await new Promise(resolve => setTimeout(resolve, 150));
-
-    const captureHeight = node.scrollHeight;
-
-    // حساب scale آمن: المتصفحات تحدّ أبعاد الـ canvas (~16384px) ومساحته الإجمالية.
-    // نخفض scale تلقائياً إذا كان الناتج سيتجاوز الحد، حتى لا يفشل الالتقاط أو يخرج فارغاً.
-    const MAX_DIM = 16384;
-    const MAX_AREA = 268000000; // ~268 مليون بكسل، حد آمن عبر المتصفحات
-    let scale = 2;
-    const fitDim = MAX_DIM / Math.max(EXPORT_WIDTH, captureHeight);
-    const fitArea = Math.sqrt(MAX_AREA / (EXPORT_WIDTH * captureHeight));
-    scale = Math.max(1, Math.min(scale, fitDim, fitArea));
-
     try{
+      const imgs = Array.from(node.querySelectorAll('img'));
+      await Promise.race([
+        Promise.all(imgs.map(img => (img.complete && img.naturalWidth)
+          ? Promise.resolve()
+          : new Promise(res => {
+              img.onload = img.onerror = res;
+              setTimeout(res, 500);
+            }))),
+        new Promise(resolve => setTimeout(resolve, 700))
+      ]);
+
+      await new Promise(resolve => requestAnimationFrame(resolve));
+
+      const captureHeight = Math.ceil(node.getBoundingClientRect().height);
+      const MAX_DIM = 12000;
+      const MAX_AREA = 28000000; // حد عملي للجوال: يمنع إنشاء canvas ضخم يعلّق الصفحة.
+      const fitDim = MAX_DIM / Math.max(EXPORT_WIDTH, captureHeight);
+      const fitArea = Math.sqrt(MAX_AREA / (EXPORT_WIDTH * captureHeight));
+      const scale = Math.max(0.9, Math.min(BASE_SCALE, fitDim, fitArea));
+
       return await html2canvas(node, {
         backgroundColor:'#0a0e1a',
         scale,
         useCORS:true,
         allowTaint:true,
         logging:false,
+        imageTimeout:700,
+        removeContainer:true,
+        foreignObjectRendering:false,
         width:EXPORT_WIDTH,
         height:captureHeight,
         windowWidth:EXPORT_WIDTH,
         windowHeight:captureHeight,
         scrollX:0,
-        scrollY:0
+        scrollY:0,
+        ignoreElements:(el)=>el && el.classList && el.classList.contains('no-export')
       });
     } finally {
       node.classList.remove('is-exporting');
       document.body.classList.remove('exporting-lock');
       node.style.width = prevWidth;
       node.style.maxWidth = prevMaxWidth;
+      window.scrollTo(prevScrollX, prevScrollY);
       if(this.radarChart && typeof this.radarChart.resize === 'function') this.radarChart.resize();
     }
   },
@@ -1214,8 +1233,8 @@ const App = {
         window.print();
         return;
       }
-      const canvas = await this.getResultCanvas();
-      const imgData = canvas.toDataURL('image/jpeg', 0.96);
+      const canvas = await this.getResultCanvas({mode:'pdf'});
+      const imgData = canvas.toDataURL('image/jpeg', 0.94);
       const { jsPDF } = window.jspdf;
       const margin = 24;
       // صفحة واحدة طويلة متصلة بأبعاد المحتوى نفسه (وليست صفحات A4 مقسمة)
@@ -1241,14 +1260,14 @@ const App = {
   async captureResultImage(btn) {
     this.setExportBusy(btn, true, 'جاري تجهيز الصورة');
     try{
-      const canvas = await this.getResultCanvas();
-      const blob = await new Promise(resolve => { try{ canvas.toBlob(resolve, 'image/png', 1); }catch(e){ resolve(null); } });
-      const filename = 'govcheck-result.png';
+      const canvas = await this.getResultCanvas({mode:'image'});
+      const blob = await new Promise(resolve => { try{ canvas.toBlob(resolve, 'image/jpeg', 0.93); }catch(e){ resolve(null); } });
+      const filename = 'govcheck-result.jpg';
       if(blob){
         // مشاركة عبر نظام الجوال إن كانت مدعومة، وإلا تنزيل مباشر
         try{
           if(window.File && navigator.canShare){
-            const file = new File([blob], filename, {type:'image/png'});
+            const file = new File([blob], filename, {type:'image/jpeg'});
             if(navigator.canShare({files:[file]})){
               await navigator.share({files:[file], title:'نتيجة فحص صحة الحوكمة'});
               return;
@@ -1266,7 +1285,7 @@ const App = {
       } else {
         // بديل: تحويل مباشر إلى رابط بيانات
         const link = document.createElement('a');
-        link.href = canvas.toDataURL('image/png');
+        link.href = canvas.toDataURL('image/jpeg', 0.93);
         link.download = filename;
         document.body.appendChild(link);
         link.click();
