@@ -953,8 +953,12 @@ const App = {
     total=Math.round(total);
 
     const level=LEVELS.find(l=>total>=l.min&&total<=l.max)||LEVELS[4];
-    const sortedAxes=[...AXES].sort((a,b)=>axisScores[a.id]-axisScores[b.id]);
-    const topRecs=sortedAxes.slice(0,3).map(a=>RECOMMENDATIONS[a.id]);
+    // التوصيات تُبنى فقط على المحاور التي تحتاج تحسيناً فعلاً (أقل من 75%)، مرتبة من الأضعف
+    const REC_THRESHOLD=75;
+    const weakSorted=[...AXES]
+      .filter(a=>axisScores[a.id]<REC_THRESHOLD)
+      .sort((a,b)=>axisScores[a.id]-axisScores[b.id]);
+    const topRecs=weakSorted.slice(0,3).map(a=>({...RECOMMENDATIONS[a.id],pct:axisScores[a.id]}));
     const activePatterns=detectPatterns(axisScores);
     const execDiagnosis=buildExecutiveDiagnosis(axisScores,activePatterns,total);
 
@@ -1071,9 +1075,9 @@ const App = {
       `:''}
 
       <!-- Recommendations -->
-      <div class="sec-head"><div class="sec-head-text">أولويات التحسين</div><div class="sec-head-line"></div></div>
+      <div class="sec-head"><div class="sec-head-text">${topRecs.length?'أولويات التحسين':'الخطوات التالية'}</div><div class="sec-head-line"></div></div>
       <div class="recs">
-        ${topRecs.map((rec,i)=>`
+        ${topRecs.length?topRecs.map((rec,i)=>`
           <div class="rec-card ${rec.urgency}">
             <div class="rec-icon">${i===0?'⚠':'📌'}</div>
             <div class="rec-body">
@@ -1082,7 +1086,16 @@ const App = {
               <div class="rec-desc">${rec.desc}</div>
             </div>
           </div>
-        `).join('')}
+        `).join(''):`
+          <div class="rec-card">
+            <div class="rec-icon">✅</div>
+            <div class="rec-body">
+              <div class="rec-priority">حافظ على المستوى</div>
+              <div class="rec-title">جميع محاور الحوكمة لديك في وضع قوي</div>
+              <div class="rec-desc">لا توجد ثغرات جوهرية تستدعي تدخلاً عاجلاً. ركّز الآن على ترسيخ ما بنيته: راجع الوثائق والاتفاقيات دورياً (كل 6 إلى 12 شهراً)، وحدّثها مع أي توسّع أو دخول شريك أو ممول جديد، حتى يبقى المشروع جاهزاً للاستثمار والنمو.</div>
+            </div>
+          </div>
+        `}
       </div>
       </div>
 
@@ -1137,15 +1150,31 @@ const App = {
     node.style.width = EXPORT_WIDTH + 'px';
     node.style.maxWidth = EXPORT_WIDTH + 'px';
 
+    // التأكد من اكتمال تحميل صور التصدير (مثل شعار الرأس) قبل الالتقاط
+    const imgs = Array.from(node.querySelectorAll('img'));
+    await Promise.all(imgs.map(img => (img.complete && img.naturalWidth)
+      ? Promise.resolve()
+      : new Promise(res => { img.onload = img.onerror = res; })));
+
     // انتظار استقرار التخطيط واكتمال رسم الرادار قبل الالتقاط
     await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
     await new Promise(resolve => setTimeout(resolve, 150));
 
     const captureHeight = node.scrollHeight;
+
+    // حساب scale آمن: المتصفحات تحدّ أبعاد الـ canvas (~16384px) ومساحته الإجمالية.
+    // نخفض scale تلقائياً إذا كان الناتج سيتجاوز الحد، حتى لا يفشل الالتقاط أو يخرج فارغاً.
+    const MAX_DIM = 16384;
+    const MAX_AREA = 268000000; // ~268 مليون بكسل، حد آمن عبر المتصفحات
+    let scale = 2;
+    const fitDim = MAX_DIM / Math.max(EXPORT_WIDTH, captureHeight);
+    const fitArea = Math.sqrt(MAX_AREA / (EXPORT_WIDTH * captureHeight));
+    scale = Math.max(1, Math.min(scale, fitDim, fitArea));
+
     try{
       return await html2canvas(node, {
         backgroundColor:'#0a0e1a',
-        scale:2,
+        scale,
         useCORS:true,
         allowTaint:true,
         logging:false,
@@ -1198,16 +1227,19 @@ const App = {
     this.setExportBusy(btn, true, 'جاري تجهيز الصورة');
     try{
       const canvas = await this.getResultCanvas();
-      const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png', 1));
+      const blob = await new Promise(resolve => { try{ canvas.toBlob(resolve, 'image/png', 1); }catch(e){ resolve(null); } });
       const filename = 'govcheck-result.png';
       if(blob){
-        if(window.File && navigator.canShare){
-          const file = new File([blob], filename, {type:'image/png'});
-          if(navigator.canShare({files:[file]})){
-            await navigator.share({files:[file], title:'نتيجة فحص صحة الحوكمة'});
-            return;
+        // مشاركة عبر نظام الجوال إن كانت مدعومة، وإلا تنزيل مباشر
+        try{
+          if(window.File && navigator.canShare){
+            const file = new File([blob], filename, {type:'image/png'});
+            if(navigator.canShare({files:[file]})){
+              await navigator.share({files:[file], title:'نتيجة فحص صحة الحوكمة'});
+              return;
+            }
           }
-        }
+        }catch(shareErr){ /* تجاهل وتابع للتنزيل المباشر */ }
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
@@ -1217,6 +1249,7 @@ const App = {
         link.remove();
         setTimeout(() => URL.revokeObjectURL(url), 1500);
       } else {
+        // بديل: تحويل مباشر إلى رابط بيانات
         const link = document.createElement('a');
         link.href = canvas.toDataURL('image/png');
         link.download = filename;
@@ -1226,7 +1259,7 @@ const App = {
       }
     } catch(err){
       console.error(err);
-      alert('تعذر التقاط الصورة. جرّب من متصفح آخر أو استخدم خيار PDF.');
+      alert('تعذر التقاط الصورة: ' + (err && err.message ? err.message : 'خطأ غير معروف') + '. جرّب خيار PDF أو متصفحاً آخر.');
     } finally {
       this.setExportBusy(btn, false);
     }
