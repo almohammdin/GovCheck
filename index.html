@@ -54,6 +54,8 @@ html{scroll-behavior:smooth;overflow-x:clip}
   --radius:12px;
   --radius-sm:8px;
   --font:'IBM Plex Sans Arabic',sans-serif;
+  --ease-out:cubic-bezier(.23,1,.32,1);
+  --ease-in-out:cubic-bezier(.77,0,.175,1);
 }
 body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;direction:rtl;font-size:14px;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:clip}
 ::-webkit-scrollbar{width:4px}
@@ -75,28 +77,27 @@ header{background:rgba(10,14,26,.95);border-bottom:1px solid var(--gold-bd);padd
 
 /* ── PROGRESS ── */
 .prog-track{height:3px;background:rgba(255,255,255,.06)}
-.prog-fill{height:3px;background:linear-gradient(90deg,var(--gold),var(--gold-lt));transition:width .5s ease;border-radius:0 2px 2px 0}
+.prog-fill{width:100%;height:3px;background:linear-gradient(90deg,var(--gold),var(--gold-lt));transform:scaleX(0);transform-origin:right center;transition:transform .24s var(--ease-out);border-radius:0 2px 2px 0;will-change:transform}
 
 /* ── STEP BAR ── */
 .step-bar{background:rgba(15,22,40,.97);border-bottom:1px solid var(--border);padding:10px 0;position:sticky;top:65px;z-index:200;backdrop-filter:blur(8px)}
 .step-inner{display:flex;align-items:center;gap:10px}
 .step-list{display:flex;align-items:center;flex:1;gap:0;overflow:hidden}
 .step-item{display:flex;align-items:center;flex-shrink:0}
-.step-dot{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;background:var(--card);color:var(--muted);border:1px solid var(--border);transition:all .3s;flex-shrink:0}
+.step-dot{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;background:var(--card);color:var(--muted);border:1px solid var(--border);transition:background-color .2s ease,border-color .2s ease,color .2s ease,box-shadow .2s ease;flex-shrink:0}
 .step-item.active .step-dot{background:var(--gold-dim);border-color:var(--gold);color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,.12)}
 .step-item.done .step-dot{background:var(--gold);border-color:var(--gold);color:#0a0e1a}
 .step-line{width:14px;height:1px;background:var(--border);flex-shrink:0;margin:0 2px}
 .step-item.done+.step-line{background:rgba(201,168,76,.35)}
 .step-counter{font-size:10px;font-weight:700;color:var(--gold);background:var(--gold-dim);border:1px solid var(--gold-bd);padding:3px 9px;border-radius:20px;white-space:nowrap;flex-shrink:0}
-.step-home{font-family:var(--font);font-size:10px;font-weight:700;color:var(--gold);background:transparent;border:1px solid var(--gold-bd);padding:3px 9px;border-radius:20px;white-space:nowrap;cursor:pointer;transition:all .2s;flex-shrink:0}
+.step-home{font-family:var(--font);font-size:10px;font-weight:700;color:var(--gold);background:transparent;border:1px solid var(--gold-bd);padding:3px 9px;border-radius:20px;white-space:nowrap;cursor:pointer;transition:background-color .2s ease,color .2s ease,transform .16s var(--ease-out);flex-shrink:0}
 .step-home:hover{background:var(--gold-dim);color:var(--gold-lt)}
 
 /* ── PHASES ── */
 main{padding:0}
 .phase{display:none}
 .phase:not(#ph0){padding:28px 0 60px}
-.phase.active{display:block;animation:fadeUp .35s ease}
-@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.phase.active{display:block}
 
 /* ── SPLASH ── */
 .splash-hero{position:relative;background:var(--bg);height:calc(100svh - 160px);min-height:0;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:0}
@@ -107,7 +108,7 @@ main{padding:0}
 .splash-title span{color:var(--gold)}
 .splash-desc{font-size:15px;color:var(--text-mid);line-height:1.7;margin-bottom:22px;max-width:440px;margin-inline:auto}
 .splash-cta{width:100%;max-width:320px;margin:0 auto 18px;display:block;background:linear-gradient(135deg,#C9A84C,#E0BC6A);color:#0a0e1a;font-weight:700;font-size:16px;padding:16px 32px;border-radius:10px;border:none;cursor:pointer;transition:opacity .2s,transform .15s;font-family:var(--font)}
-.splash-cta:hover{opacity:.92;transform:translateY(-2px)}
+.splash-cta:hover{opacity:.92}
 .splash-cta:active{transform:scale(.98)}
 .splash-checks{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 16px;margin-bottom:20px}
 .splash-check{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-mid)}
@@ -125,21 +126,28 @@ main{padding:0}
 .q-text{font-size:14px;font-weight:600;color:var(--text-mid);margin-bottom:12px;line-height:1.6}
 .q-text span{font-size:11px;font-weight:500;color:var(--muted);display:block;margin-top:2px}
 .choices{display:flex;flex-direction:column;gap:8px}
-.choice{border:1px solid var(--border);background:var(--card);border-radius:var(--radius-sm);padding:13px 16px;cursor:pointer;display:flex;align-items:flex-start;gap:12px;transition:border-color .2s,background .2s}
+.choice{border:1px solid var(--border);background:var(--card);border-radius:var(--radius-sm);padding:13px 16px;cursor:pointer;display:flex;align-items:flex-start;gap:12px;transition:border-color .18s ease,background-color .18s ease,transform .16s var(--ease-out);position:relative}
+.choice-input{position:absolute;inline-size:1px;block-size:1px;opacity:0;pointer-events:none}
+.choice:active{transform:scale(.985)}
+.choice:has(.choice-input:focus-visible){outline:2px solid var(--gold-lt);outline-offset:3px}
 .choice:hover{border-color:var(--gold-bd);background:rgba(201,168,76,.05)}
 .choice.selected{border-color:var(--gold);background:var(--gold-dim)}
-.choice-radio{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--muted);flex-shrink:0;margin-top:1px;transition:all .2s;position:relative}
+.choice-radio{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--muted);flex-shrink:0;margin-top:1px;transition:border-color .18s ease,background-color .18s ease,transform .18s var(--ease-out);position:relative}
 .choice.selected .choice-radio{border-color:var(--gold);background:var(--gold)}
+.choice.selected .choice-radio{transform:scale(1.06)}
 .choice.selected .choice-radio::after{content:'';position:absolute;inset:3px;border-radius:50%;background:#0a0e1a}
 .choice-text{font-size:13px;color:var(--text-mid);line-height:1.55;flex:1}
 .choice.selected .choice-text{color:var(--text)}
 /* ── NAV BUTTONS ── */
 .nav-row{display:flex;gap:12px;margin-top:8px}
-.btn-back{flex:0 0 auto;background:transparent;border:1px solid var(--border);color:var(--muted);padding:13px 20px;border-radius:var(--radius-sm);cursor:pointer;font-family:var(--font);font-size:13px;transition:all .2s}
+.btn-back{flex:0 0 auto;background:transparent;border:1px solid var(--border);color:var(--muted);padding:13px 20px;border-radius:var(--radius-sm);cursor:pointer;font-family:var(--font);font-size:13px;transition:border-color .2s ease,color .2s ease,transform .16s var(--ease-out)}
 .btn-back:hover{border-color:var(--gold-bd);color:var(--gold)}
 .btn-next{flex:1;background:linear-gradient(135deg,#C9A84C,#E0BC6A);color:#0a0e1a;font-weight:700;font-size:14px;padding:14px;border-radius:var(--radius-sm);border:none;cursor:pointer;font-family:var(--font);transition:opacity .2s,transform .15s}
-.btn-next:hover:not(:disabled){opacity:.9;transform:translateY(-1px)}
+.btn-next:hover:not(:disabled){opacity:.9}
 .btn-next:active{transform:scale(.98)}
+.btn-back:active,.step-home:active,.result-tool-btn:active,.btn-x:active,.btn-wa:active{transform:scale(.97)}
+.btn-next.just-ready{animation:readyPulse .28s var(--ease-out)}
+@keyframes readyPulse{50%{transform:scale(.975)}100%{transform:scale(1)}}
 .btn-next:disabled{opacity:.35;cursor:not-allowed;transform:none}
 
 /* ── DIVIDER ── */
@@ -159,8 +167,8 @@ main{padding:0}
 .result-msg{font-size:13px;color:var(--text-mid);line-height:1.6;max-width:380px;margin:0 auto}
 
 .result-tools{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 16px}
-.result-tool-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:rgba(255,255,255,.08);color:var(--text);font-weight:700;font-size:12px;padding:11px 12px;border-radius:9px;text-decoration:none;border:1px solid var(--gold-bd);transition:all .2s;cursor:pointer;font-family:var(--font);min-height:42px}
-.result-tool-btn:hover{background:var(--gold-dim);color:var(--gold-lt);transform:translateY(-1px)}
+.result-tool-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:rgba(255,255,255,.08);color:var(--text);font-weight:700;font-size:12px;padding:11px 12px;border-radius:9px;text-decoration:none;border:1px solid var(--gold-bd);transition:background-color .2s ease,color .2s ease,transform .16s var(--ease-out);cursor:pointer;font-family:var(--font);min-height:42px}
+.result-tool-btn:hover{background:var(--gold-dim);color:var(--gold-lt)}
 .result-tool-btn:disabled{opacity:.55;cursor:wait;transform:none}
 .result-export-area{background:var(--bg);border-radius:16px}
 .result-export-area.is-exporting{padding:32px 28px;background:#0a0e1a}
@@ -196,7 +204,7 @@ body.exporting-lock .no-export{pointer-events:none}
 
 /* Score bar */
 .score-track{height:8px;background:rgba(255,255,255,.06);border-radius:4px;margin:20px 0 8px;position:relative;overflow:visible}
-.score-fill{height:8px;border-radius:4px;transition:width 1s ease}
+.score-fill{width:100%;height:8px;border-radius:4px;transform:scaleX(0);transform-origin:right center;transition:transform .7s var(--ease-out)}
 .score-pointer{position:absolute;top:-20px;transform:translateX(50%);font-size:10px;font-weight:700;white-space:nowrap}
 
 /* ── SECTION HEADERS ── */
@@ -216,7 +224,7 @@ body.exporting-lock .no-export{pointer-events:none}
 .ac-name{font-size:12px;font-weight:600;color:var(--text-mid);flex:1;min-width:0;word-break:break-word;line-height:1.4}
 .ac-pct{font-size:13px;font-weight:700}
 .ac-bar-track{height:5px;background:rgba(255,255,255,.06);border-radius:3px}
-.ac-bar-fill{height:5px;border-radius:3px;transition:width 1s ease}
+.ac-bar-fill{width:100%;height:5px;border-radius:3px;transform:scaleX(0);transform-origin:right center;transition:transform .7s var(--ease-out)}
 .ac-flag{font-size:11px;color:var(--red);margin-top:8px;display:flex;align-items:flex-start;gap:5px;line-height:1.5}
 .ac-flag svg{flex-shrink:0;margin-top:2px}
 
@@ -249,7 +257,7 @@ body.exporting-lock .no-export{pointer-events:none}
 .cta-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:0}
 .btn-wa{display:inline-flex;align-items:center;gap:7px;background:#25D366;color:#fff;font-weight:700;font-size:12px;padding:9px 16px;border-radius:8px;text-decoration:none;transition:opacity .2s}
 .btn-wa:hover{opacity:.9}
-.btn-x{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.08);color:var(--text);font-weight:600;font-size:13px;padding:12px 22px;border-radius:8px;text-decoration:none;border:1px solid var(--border);transition:all .2s}
+.btn-x{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.08);color:var(--text);font-weight:600;font-size:13px;padding:12px 22px;border-radius:8px;text-decoration:none;border:1px solid var(--border);transition:border-color .2s ease,color .2s ease,transform .16s var(--ease-out)}
 .btn-x:hover{border-color:var(--gold-bd);color:var(--gold)}
 .cta-btns button.btn-x{cursor:pointer;font-family:var(--font)}
 .cta-outro{text-align:center;margin:0 auto 6px;padding-bottom:0}
@@ -259,6 +267,23 @@ body.exporting-lock .no-export{pointer-events:none}
 .social-row{display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap}
 .soc{display:flex;align-items:center;gap:5px;text-decoration:none;color:var(--muted);font-size:11px;font-weight:600;direction:ltr;transition:color .2s}
 .soc:hover{color:var(--gold)}
+
+button:focus-visible,a:focus-visible{outline:2px solid var(--gold-lt);outline-offset:3px}
+.result-page.result-ready .score-fill,.result-page.result-ready .ac-bar-fill{transform:scaleX(var(--score,1))}
+.result-page.result-ready .result-hero,.result-page.result-ready .exec-diag,.result-page.result-ready .radar-wrap,.result-page.result-ready .axis-cards,.result-page.result-ready .flags-box,.result-page.result-ready .recs{animation:resultReveal .42s var(--ease-out) both}
+.result-page.result-ready .exec-diag{animation-delay:.04s}.result-page.result-ready .radar-wrap{animation-delay:.08s}.result-page.result-ready .axis-cards{animation-delay:.12s}.result-page.result-ready .flags-box{animation-delay:.16s}.result-page.result-ready .recs{animation-delay:.2s}
+@keyframes resultReveal{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+@media(hover:hover) and (pointer:fine){
+  .splash-cta:hover{opacity:.92;transform:translateY(-2px)}
+  .btn-next:hover:not(:disabled){opacity:.9;transform:translateY(-1px)}
+  .result-tool-btn:hover{background:var(--gold-dim);color:var(--gold-lt);transform:translateY(-1px)}
+}
+
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+}
 
 /* ── EXECUTIVE DIAGNOSIS ── */
 .exec-diag{background:linear-gradient(135deg,rgba(201,168,76,.08),rgba(201,168,76,.03));border:1px solid var(--gold-bd);border-radius:var(--radius);padding:24px;margin-bottom:20px;position:relative;overflow:hidden}
@@ -426,7 +451,7 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding:14px
           أداة عملية لفحص صحة الحوكمة في المشاريع والشراكات، مستندة إلى أفضل الممارسات في حوكمة المنشآت وإدارة مخاطر الشراكة
         </div>
       </div>
-      <button class="splash-cta" onclick="App.start()">ابدأ فحص الحوكمة الآن ←</button>
+      <button class="splash-cta" id="startBtn" onclick="App.start()">ابدأ فحص الحوكمة الآن ←</button>
       <div class="splash-checks">
         <div class="splash-check">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--green)"><polyline points="20 6 9 17 4 12"/></svg>
@@ -822,11 +847,47 @@ const App = {
   currentPhase: 0,
   answers: {},
   radarChart: null,
+  storageKey: 'govcheck-progress-v2',
+
+  init() {
+    const saved = this.readSaved();
+    const answered = saved ? Object.keys(saved.answers || {}).length : 0;
+    const btn = document.getElementById('startBtn');
+    if(btn && answered) btn.textContent = `متابعة الفحص (${answered} إجابة) ←`;
+  },
+
+  readSaved() {
+    try { return JSON.parse(localStorage.getItem(this.storageKey) || 'null'); }
+    catch(e) { return null; }
+  },
+
+  saveProgress() {
+    try {
+      localStorage.setItem(this.storageKey, JSON.stringify({answers:this.answers,currentPhase:this.currentPhase,updatedAt:Date.now()}));
+    } catch(e) { /* يستمر الفحص حتى لو كان التخزين المحلي غير متاح */ }
+  },
+
+  restoreProgress() {
+    const saved = this.readSaved();
+    if(!saved || !saved.answers) return 1;
+    this.answers = saved.answers;
+    Object.entries(this.answers).forEach(([qId,answer]) => {
+      if(answer && Number.isInteger(answer.choiceIdx)) {
+        const input = document.getElementById(`input-${qId}-${answer.choiceIdx}`);
+        const choice = document.getElementById(`choice-${qId}-${answer.choiceIdx}`);
+        if(input) input.checked = true;
+        if(choice) choice.classList.add('selected');
+      }
+    });
+    AXES.forEach((axis,idx)=>this.checkAxisComplete(idx+1,false));
+    return Math.min(Math.max(Number(saved.currentPhase)||1,1),AXES.length);
+  },
 
   start() {
     if(!document.getElementById('ph1')) this.buildAxisPhases();
     if(!document.getElementById('ph8')) this.buildResultPhase();
-    this.go(1);
+    const resumePhase = this.restoreProgress();
+    this.go(resumePhase);
     document.getElementById('stepBar').style.display = 'block';
     this.updateStepBar();
   },
@@ -850,13 +911,14 @@ const App = {
               <div class="q-text">${q.text}</div>
               <div class="choices">
                 ${q.choices.map((c, ci) => `
-                  <div class="choice ${c.level}" id="choice-${q.id}-${ci}"
-                       onclick="App.pick('${q.id}',${ci})">
-                    <div class="choice-radio"></div>
+                  <label class="choice ${c.level}" id="choice-${q.id}-${ci}">
+                    <input class="choice-input" type="radio" name="${q.id}" id="input-${q.id}-${ci}"
+                           onchange="App.pick('${q.id}',${ci})">
+                    <span class="choice-radio" aria-hidden="true"></span>
                     <div style="flex:1">
                       <div class="choice-text">${c.text}</div>
                     </div>
-                  </div>
+                  </label>
                 `).join('')}
               </div>
             </div>
@@ -892,15 +954,26 @@ const App = {
     // Select clicked
     document.getElementById(`choice-${qId}-${choiceIdx}`).classList.add('selected');
 
-    this.answers[qId] = { pts: choice.pts, flag: choice.flag, axisId: axis };
+    this.answers[qId] = { pts: choice.pts, flag: choice.flag, axisId: axis, choiceIdx };
     this.checkAxisComplete(axis);
+    this.updateProgress();
+    this.updateStepBar();
+    this.saveProgress();
   },
 
-  checkAxisComplete(axisId) {
+  checkAxisComplete(axisId, animate=true) {
     const axis = AXES[axisId-1];
     const allAnswered = axis.questions.every(q => this.answers[q.id] !== undefined);
     const btn = document.getElementById(`btn-next-${axisId}`);
-    if(btn) btn.disabled = !allAnswered;
+    if(btn) {
+      const wasDisabled = btn.disabled;
+      btn.disabled = !allAnswered;
+      if(animate && wasDisabled && allAnswered) {
+        btn.classList.remove('just-ready');
+        void btn.offsetWidth;
+        btn.classList.add('just-ready');
+      }
+    }
   },
 
   next() {
@@ -912,13 +985,23 @@ const App = {
   },
 
   go(n) {
+    const previous = this.currentPhase;
     document.querySelectorAll('.phase').forEach(p=>p.classList.remove('active'));
     const ph = document.getElementById(`ph${n}`);
     if(ph) ph.classList.add('active');
     this.currentPhase = n;
     this.updateStepBar();
     this.updateProgress();
-    window.scrollTo({top:0,behavior:'smooth'});
+    this.saveProgress();
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(ph && !reduceMotion && previous !== n) {
+      const offset = n > previous ? -10 : 10;
+      ph.animate(
+        [{opacity:0,transform:`translateX(${offset}px)`},{opacity:1,transform:'translateX(0)'}],
+        {duration:210,easing:'cubic-bezier(.23,1,.32,1)'}
+      );
+    }
+    window.scrollTo({top:0,behavior:reduceMotion?'auto':'smooth'});
   },
 
   updateStepBar() {
@@ -940,14 +1023,18 @@ const App = {
       if(i<AXES.length-1) html+=`<div class="step-line"></div>`;
     });
     list.innerHTML=html;
-    if(counter) counter.textContent=`المحور ${this.currentPhase} من ${AXES.length}`;
+    const totalQuestions=AXES.reduce((sum,axis)=>sum+axis.questions.length,0);
+    const answered=Object.keys(this.answers).length;
+    if(counter) counter.textContent=`المحور ${this.currentPhase} من ${AXES.length} · ${answered}/${totalQuestions}`;
   },
 
   updateProgress() {
     const fill = document.getElementById('progFill');
     if(!fill) return;
-    const pct = this.currentPhase===0?0 : this.currentPhase===8?100 : ((this.currentPhase-1)/AXES.length)*100;
-    fill.style.width=pct+'%';
+    const totalQuestions=AXES.reduce((sum,axis)=>sum+axis.questions.length,0);
+    const answered=Object.keys(this.answers).length;
+    const pct=this.currentPhase===8?100:(answered/totalQuestions)*100;
+    fill.style.transform=`scaleX(${Math.max(0,Math.min(1,pct/100))})`;
   },
 
   showResults() {
@@ -1015,7 +1102,7 @@ const App = {
         <div class="result-classification" style="color:${level.color}">${level.label}</div>
         <p class="result-msg">${total===100?'نتيجة مكتملة. لا تظهر من إجاباتك ثغرات حوكمة تحتاج معالجة عاجلة.':level.msg}</p>
         <div class="score-track" style="margin-top:24px">
-          <div class="score-fill" style="width:${total}%;background:${level.color}"></div>
+          <div class="score-fill" style="--score:${total/100};background:${level.color}"></div>
         </div>
         <div style="display:flex;justify-content:space-between;margin-top:6px">
           <span style="font-size:10px;color:var(--red)">خطر عالٍ</span>
@@ -1070,7 +1157,7 @@ const App = {
                 <div class="ac-pct" style="color:${barColor}">${pct}%</div>
               </div>
               <div class="ac-bar-track">
-                <div class="ac-bar-fill" style="width:${pct}%;background:${barColor}"></div>
+                <div class="ac-bar-fill" style="--score:${pct/100};background:${barColor}"></div>
               </div>
               ${axisFlags.length?axisFlags.map(f=>`<div class="ac-flag"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color:var(--red);flex-shrink:0;margin-top:2px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>${f}</div>`).join(''):''}
             </div>
@@ -1134,9 +1221,12 @@ const App = {
     `;
 
     document.getElementById('stepBar').style.display='none';
-    document.getElementById('progFill').style.width='100%';
+    document.getElementById('progFill').style.transform='scaleX(1)';
     this.go(8);
-    setTimeout(()=>this.renderRadar(axisScores),100);
+    requestAnimationFrame(()=>{
+      container.classList.add('result-ready');
+      this.renderRadar(axisScores);
+    });
   },
 
   setExportBusy(btn, busy, text) {
@@ -1382,16 +1472,20 @@ const App = {
   restart() {
     this.answers={};
     this.currentPhase=0;
+    try { localStorage.removeItem(this.storageKey); } catch(e) {}
     document.querySelectorAll('.choice').forEach(el=>el.classList.remove('selected'));
     document.querySelectorAll('[id^="btn-next-"]').forEach(btn=>btn.disabled=true);
     document.getElementById('stepBar').style.display='none';
-    document.getElementById('progFill').style.width='0%';
+    document.getElementById('progFill').style.transform='scaleX(0)';
     document.querySelectorAll('.phase').forEach(p=>p.classList.remove('active'));
     document.getElementById('ph0').classList.add('active');
     this.currentPhase=0;
-    window.scrollTo({top:0,behavior:'smooth'});
+    const btn=document.getElementById('startBtn');
+    if(btn) btn.textContent='ابدأ فحص الحوكمة الآن ←';
+    window.scrollTo({top:0,behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
   }
 };
+document.addEventListener('DOMContentLoaded',()=>App.init());
 </script>
 </body>
 </html>
