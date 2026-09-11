@@ -33,7 +33,7 @@ button:focus-visible,a:focus-visible,label:has(input:focus-visible){outline:3px 
 header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.92);backdrop-filter:blur(14px);border-bottom:1px solid rgba(23,59,87,.09)}
 .hdr{min-height:68px;display:flex;align-items:center;gap:12px}
 .brand{display:flex;align-items:center;gap:10px;min-width:0}
-.brandmark{width:48px;height:40px;display:flex;align-items:center;justify-content:center;flex:none}.brandmark img{display:block;width:100%;height:100%;object-fit:contain}
+.brandmark{width:48px;height:40px;display:flex;align-items:center;justify-content:center;flex:none}.brandmark img,.footer-logo img{display:block;width:100%;height:100%;object-fit:contain;filter:brightness(0) saturate(100%) invert(18%) sepia(18%) saturate(990%) hue-rotate(166deg) brightness(92%) contrast(92%)}
 .brandtext{min-width:0}
 .brandtitle{font-weight:700;color:var(--navy);font-size:14px;line-height:1.35}
 .brandsub{font-size:10px;color:var(--muted);direction:ltr;text-align:right}
@@ -115,7 +115,7 @@ main{min-height:calc(100vh - 125px)}
 .tool{cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--navy);padding:11px 14px;border-radius:12px;font-weight:700;font-size:12px;transition:transform 150ms var(--ease-out),border-color 180ms ease,background-color 180ms ease}
 .tool:hover{border-color:#B9C8CE;background:#FAFBFA}
 footer{border-top:1px solid var(--line);background:#fff;padding:15px 0}
-.footerin{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap}
+.footerin{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap}.footer-brand{display:flex;align-items:center;gap:8px}.footer-logo{width:22px;height:18px;display:flex;align-items:center;justify-content:center;opacity:.82}
 .handle{font:600 12px Arial;color:var(--navy);direction:ltr}
 .social{display:flex;gap:9px;align-items:center}
 .social a{width:28px;height:28px;border-radius:9px;display:grid;place-items:center;color:#6A7780;text-decoration:none;transition:transform 150ms var(--ease-out),background-color 180ms ease,color 180ms ease}
@@ -188,7 +188,7 @@ footer{border-top:1px solid var(--line);background:#fff;padding:15px 0}
         <div class="result-message" id="resultMessage"></div>
         <div class="heat-wrap" aria-label="مؤشر مستوى الحوكمة">
           <div class="heat-track"><span class="heat-pointer" id="heatPointer"></span></div>
-          <div class="heat-labels"><span>خطر عال</span><span>حوكمة متقدمة</span></div>
+          <div class="heat-labels"><span>خطر</span><span>متوسط</span><span>متقدم</span></div>
         </div>
       </div>
 
@@ -215,7 +215,10 @@ footer{border-top:1px solid var(--line);background:#fff;padding:15px 0}
 
 <footer>
   <div class="wrap footerin">
-    <span class="handle">@almohammdin</span>
+    <div class="footer-brand">
+      <span class="footer-logo"><img src="https://raw.githubusercontent.com/almohammdin/mycv/main/naif-logo.svg" alt="شعار نايف المحمدي"></span>
+      <span class="handle">@almohammdin</span>
+    </div>
     <div class="social">
       <a href="https://x.com/almohammdin" target="_blank" rel="noopener" aria-label="X"><i class="fa-brands fa-x-twitter"></i></a>
       <a href="https://www.linkedin.com/in/almohammdin/" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
@@ -236,7 +239,7 @@ const AXES=[
 ]},
 {id:2,weight:.18,title:'الحوكمة المالية وفصل الذمم',desc:'فصل المال الشخصي عن التجاري وضبط الصرف والشفافية المالية.',questions:[
 ['هل يوجد حساب بنكي منفصل تماما لأموال المشروع؟',['نعم، حساب مستقل باسم المنشأة','حساب مشترك أو يستخدم أحيانا للأغراض الشخصية','لا يوجد فصل والأموال مختلطة'],['','','الأموال الشخصية والتجارية مختلطة']],
-['هل صلاحيات الصرف وحدوده واضحة ومتفق عليها؟',['نعم، محددة بمبالغ وتحتاج موافقة لمبالغ معينة','غير رسمية لكن هناك تفاهم بين الشركاء','لا توجد ضوابط للصرف'],['','','غياب ضوابط الصرف المالي']],
+['هل صلاحيات الصرف وحدوده واضحة ومتفق عليها؟',['نعم، محددة بمبالغ وآليات موافقة','غير رسمية لكن هناك تفاهم','لا توجد ضوابط للصرف'],['','','غياب ضوابط الصرف المالي']],
 ['هل تعد تقارير مالية دورية يطلع عليها الشركاء؟',['نعم، تقارير منتظمة شهرية أو ربعية','أحيانا أو عند الطلب فقط','لا توجد تقارير مالية دورية'],['','','لا شفافية مالية دورية بين الشركاء']]
 ]},
 {id:3,weight:.14,title:'الصلاحيات واتخاذ القرار',desc:'وضوح من يقرر ماذا وكيف تعتمد القرارات الجوهرية.',questions:[
