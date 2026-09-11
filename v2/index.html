@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>فحص صحة الحوكمة | GovCheck</title>
+<meta name="description" content="فحص عملي لصحة الحوكمة في الشراكات والمشاريع عبر 7 محاور، مع تشخيص فوري وأولويات واضحة للتحسين.">
+<meta name="theme-color" content="#F4F7F8">
+<meta property="og:title" content="فحص صحة الحوكمة | GovCheck">
+<meta property="og:description" content="افحص صحة الحوكمة في مشروعك واكتشف أهم المخاطر والأولويات خلال دقائق.">
+<meta property="og:image" content="https://almohammdin.github.io/GovCheck/govcheck-preview-v2.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{
+  --bg:#F5F6F4;--paper:#FFFFFF;--soft:#EEF2F2;--ink:#17212B;--muted:#68737D;
+  --navy:#173B57;--navy2:#235674;--gold:#B7863E;--gold-soft:#FBF5EA;
+  --green:#277A57;--green-soft:#EAF5EF;--amber:#A76E20;--amber-soft:#FFF5E5;
+  --red:#B84A4A;--red-soft:#FCEEEE;--line:#DDE3E2;
+  --shadow:0 12px 34px rgba(23,59,87,.07);
+  --r:18px;--r2:13px;--ease-out:cubic-bezier(.23,1,.32,1);--ease-in-out:cubic-bezier(.77,0,.175,1);
+  --font:'IBM Plex Sans Arabic',Tahoma,Arial,sans-serif
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:88px}
+body{margin:0;background:linear-gradient(145deg,#F8F6F1 0%,#F3F7F8 48%,#EEF4F6 100%);background-attachment:fixed;color:var(--ink);font-family:var(--font);font-size:15px;line-height:1.75;-webkit-font-smoothing:antialiased}
+button,input{font:inherit}
+button,a{tap-highlight-color:transparent;-webkit-tap-highlight-color:transparent}
+button:focus-visible,a:focus-visible,label:has(input:focus-visible){outline:3px solid rgba(35,86,116,.25);outline-offset:3px}
+.wrap{width:min(760px,calc(100% - 30px));margin:auto}
+header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.92);backdrop-filter:blur(14px);border-bottom:1px solid rgba(23,59,87,.09)}
+.hdr{min-height:68px;display:flex;align-items:center;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.brandmark{width:48px;height:40px;display:flex;align-items:center;justify-content:center;flex:none}.brandmark img{display:block;width:100%;height:100%;object-fit:contain}
+.brandtext{min-width:0}
+.brandtitle{font-weight:700;color:var(--navy);font-size:14px;line-height:1.35}
+.brandsub{font-size:10px;color:var(--muted);direction:ltr;text-align:right}
+.hdrmeta{margin-right:auto;display:flex;align-items:center;gap:8px}
+.progress{height:3px;background:#E8ECEB;overflow:hidden}
+.progress>i{display:block;width:0;height:100%;background:var(--navy);transform-origin:right;transition:width 220ms var(--ease-out)}
+main{min-height:calc(100vh - 125px)}
+.view{display:none}
+.view.active{display:block;animation:enter 220ms var(--ease-out) both}
+@keyframes enter{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.hero{padding:68px 0 58px}
+.eyebrow{display:inline-flex;align-items:center;gap:7px;padding:6px 10px;border:1px solid #D8DFDC;border-radius:999px;background:#fff;color:var(--navy);font-size:11px;font-weight:700;margin-bottom:16px}
+.hero h1{font-size:clamp(32px,7vw,52px);line-height:1.18;letter-spacing:-1.2px;margin:0 0 15px;color:var(--navy)}
+.hero h1 span{color:var(--gold)}
+.hero p{font-size:17px;color:#52606A;margin:0 0 24px;max-width:610px}
+.primary,.secondary,.ghost{border:0;cursor:pointer;border-radius:13px;transition:transform 150ms var(--ease-out),box-shadow 180ms var(--ease-out),background-color 180ms ease,color 180ms ease,border-color 180ms ease}
+.primary{background:var(--navy);color:#fff;padding:15px 24px;font-weight:700;box-shadow:0 8px 20px rgba(23,59,87,.14)}
+.primary:hover{background:#102F48;box-shadow:0 10px 24px rgba(23,59,87,.18)}
+.primary:active,.secondary:active,.ghost:active,.choice:active,.tool:active{transform:scale(.97)}
+.secondary{background:#fff;color:var(--navy);border:1px solid var(--line);padding:13px 18px;font-weight:700}
+.ghost{background:transparent;color:var(--muted);padding:11px 12px}
+.hero-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.hero-note{font-size:11px;color:var(--muted);margin-top:15px}
+.quiz{padding:34px 0 60px}
+.quiz-top{margin-bottom:24px}
+.axis-kicker{font-size:11px;color:var(--gold);font-weight:700;margin-bottom:5px}
+.quiz h2{margin:0 0 6px;color:var(--navy);font-size:26px;line-height:1.35}
+.axis-desc{color:var(--muted);font-size:13px;margin:0}
+.qcard{background:#fff;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:20px;margin-bottom:14px}
+.qhead{display:flex;gap:11px;align-items:flex-start;margin-bottom:14px}
+.qnum{width:29px;height:29px;border-radius:10px;background:var(--soft);color:var(--navy);display:grid;place-items:center;font:700 12px Arial;flex:none}
+.qtext{font-weight:700;color:#24313B;line-height:1.65}
+.choices{display:grid;gap:8px}
+.choice{position:relative;display:flex;align-items:flex-start;gap:10px;padding:12px 13px;border:1px solid #E1E6E5;border-radius:12px;background:#FBFCFB;cursor:pointer;transition:transform 150ms var(--ease-out),border-color 180ms ease,background-color 180ms ease,box-shadow 180ms ease}
+.choice:hover{border-color:#B9C8CE;background:#fff}
+.choice input{position:absolute;opacity:0;pointer-events:none}
+.radio{width:18px;height:18px;border:1.5px solid #AAB5BA;border-radius:50%;margin-top:2px;display:grid;place-items:center;flex:none;transition:border-color 160ms ease,background-color 160ms ease}
+.choice.selected{border-color:#7E9AAA;background:#F2F7F8;box-shadow:0 0 0 2px rgba(35,86,116,.05)}
+.choice.selected .radio{border-color:var(--navy);background:var(--navy)}
+.choice.selected .radio:after{content:"";width:6px;height:6px;background:#fff;border-radius:50%}
+.choice span:last-child{font-size:13px;color:#42515A}
+.quiz-nav{display:flex;gap:10px;margin-top:20px}
+.quiz-nav .primary{flex:1}
+.quiz-nav .secondary{flex:0 0 auto}
+.counter{font-size:11px;color:var(--muted);margin-top:9px;text-align:center}
+.result{padding:34px 0 60px}
+.result-hero{background:linear-gradient(145deg,#173B57,#214E6B);color:#fff;border-radius:24px;padding:28px;box-shadow:0 18px 44px rgba(23,59,87,.15);margin-bottom:18px;overflow:hidden;position:relative}
+.result-hero:after{content:"";position:absolute;width:190px;height:190px;border:1px solid rgba(255,255,255,.08);border-radius:50%;left:-70px;top:-80px}
+.result-label{font-size:11px;color:rgba(255,255,255,.65);font-weight:600}
+.scoreline{display:flex;align-items:end;gap:9px;margin:4px 0}
+.score{font:700 58px/1 Arial;color:#fff;letter-spacing:-2px}
+.of100{font-size:13px;color:rgba(255,255,255,.65);padding-bottom:6px}
+.classification{font-size:21px;font-weight:700;margin:10px 0 4px}
+.result-message{font-size:13px;color:rgba(255,255,255,.78);max-width:580px}
+.heat-wrap{margin-top:20px}.heat-track{position:relative;height:12px;border-radius:999px;background:linear-gradient(90deg,#B84A4A 0%,#D96B3F 26%,#D8B54A 52%,#72A968 76%,#277A57 100%);box-shadow:inset 0 0 0 1px rgba(255,255,255,.16);direction:ltr}.heat-pointer{position:absolute;top:50%;left:0;width:20px;height:20px;border-radius:50%;background:#fff;border:3px solid #173B57;box-shadow:0 3px 10px rgba(0,0,0,.22);transform:translate(-50%,-50%);transition:left 520ms var(--ease-out)}.heat-labels{display:flex;justify-content:space-between;direction:ltr;margin-top:7px;font-size:10px;color:rgba(255,255,255,.68)}
+.result-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
+.panel{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:19px;box-shadow:0 8px 26px rgba(23,59,87,.045)}
+.panel h3{margin:0 0 13px;color:var(--navy);font-size:15px}
+.clean-list{display:grid;gap:9px}
+.clean-item{display:flex;gap:9px;align-items:flex-start;font-size:12px;color:#44525B}
+.clean-item i{margin-top:4px;font-size:9px}
+.risk i{color:var(--red)} .strength i{color:var(--green)}
+.axes{display:grid;gap:10px}
+.axisrow{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px}
+.axistop{display:flex;justify-content:space-between;gap:10px;margin-bottom:8px}
+.axisname{font-size:12px;font-weight:700;color:#2E3B44}
+.axispct{font:700 12px Arial;color:var(--navy)}
+.bar{height:7px;background:#E9EEED;border-radius:999px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;border-radius:999px;background:var(--navy);transition:width 520ms var(--ease-out)}
+.section-title{display:flex;align-items:center;gap:10px;margin:25px 0 12px}
+.section-title span{font-size:12px;font-weight:700;color:var(--navy);white-space:nowrap}
+.section-title:after{content:"";height:1px;background:var(--line);flex:1}
+.recs{display:grid;gap:10px}
+.rec{background:#fff;border:1px solid var(--line);border-radius:15px;padding:16px;display:grid;grid-template-columns:34px 1fr;gap:11px}
+.recnum{width:34px;height:34px;border-radius:10px;background:var(--gold-soft);color:var(--gold);display:grid;place-items:center;font:700 12px Arial}
+.rec b{display:block;font-size:13px;color:#26343D;margin-bottom:3px}
+.rec p{margin:0;font-size:12px;color:var(--muted);line-height:1.65}
+.tools{display:flex;gap:9px;flex-wrap:wrap;margin-top:22px}
+.tool{cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--navy);padding:11px 14px;border-radius:12px;font-weight:700;font-size:12px;transition:transform 150ms var(--ease-out),border-color 180ms ease,background-color 180ms ease}
+.tool:hover{border-color:#B9C8CE;background:#FAFBFA}
+footer{border-top:1px solid var(--line);background:#fff;padding:15px 0}
+.footerin{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap}
+.handle{font:600 12px Arial;color:var(--navy);direction:ltr}
+.social{display:flex;gap:9px;align-items:center}
+.social a{width:28px;height:28px;border-radius:9px;display:grid;place-items:center;color:#6A7780;text-decoration:none;transition:transform 150ms var(--ease-out),background-color 180ms ease,color 180ms ease}
+.social a:hover{background:var(--soft);color:var(--navy)}
+.social a:active{transform:scale(.94)}
+.copy{font-size:10px;color:#8A949A;width:100%;text-align:center;line-height:1.4}
+
+@media(max-width:620px){
+  .hero{padding:48px 0 42px}.hero p{font-size:15px}.method{grid-template-columns:1fr 1fr 1fr}
+  .method div{padding:10px 6px}.method b{font-size:13px}.method span{font-size:9px}
+  .result-grid{grid-template-columns:1fr}.result-hero{padding:22px}
+  .score{font-size:52px}.qcard{padding:16px}.quiz h2{font-size:22px}.hdrmeta .autosave{display:none}
+}
+@media(max-width:380px){.wrap{width:min(100% - 22px,760px)}.brandmark{width:34px;height:34px}.brandtitle{font-size:12px}}
+@media print{
+  header,footer,.tools,.result .section-title:first-of-type{display:none!important}
+  body{background:#fff}.result{padding:0}.wrap{width:100%;max-width:none}.result-hero{box-shadow:none}
+  .panel,.axisrow,.rec,.planstep{box-shadow:none;break-inside:avoid}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap hdr">
+    <div class="brand">
+      <div class="brandmark"><img src="https://raw.githubusercontent.com/almohammdin/mycv/main/naif-logo.svg" alt="شعار نايف المحمدي"></div>
+      <div class="brandtext"><div class="brandtitle">فحص صحة الحوكمة</div><div class="brandsub">GOVERNANCE HEALTH CHECK</div></div>
+    </div>
+  </div>
+  <div class="progress"><i id="progressBar"></i></div>
+</header>
+
+<main>
+  <section id="home" class="view active">
+    <div class="wrap hero">
+      <div class="eyebrow"><i class="fa-solid fa-shield-halved"></i> تشخيص عملي للحوكمة</div>
+      <h1>افحص صحة الحوكمة<br><span>قبل أن تختبرها الأزمة</span></h1>
+      <p>تقييم يكشف نقاط القوة والثغرات في مشروعك أو شراكتك، ثم يرتب لك أولويات التدخل بوضوح.</p>
+      <div class="hero-actions">
+        <button class="primary" id="startBtn">ابدأ الفحص</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="quiz" class="view">
+    <div class="wrap quiz">
+      <div class="quiz-top">
+        <div class="axis-kicker" id="axisKicker"></div>
+        <h2 id="axisTitle"></h2>
+        <p class="axis-desc" id="axisDesc"></p>
+      </div>
+      <div id="questions"></div>
+      <div class="quiz-nav">
+        <button class="secondary" id="backBtn">السابق</button>
+        <button class="primary" id="nextBtn" disabled>التالي</button>
+      </div>
+      <div class="counter" id="counter"></div>
+    </div>
+  </section>
+
+  <section id="result" class="view">
+    <div class="wrap result">
+      <div class="result-hero">
+        <div class="result-label">نتيجة فحص صحة الحوكمة</div>
+        <div class="scoreline"><div class="score" id="score">0</div><div class="of100">/ 100</div></div>
+        <div class="classification" id="classification"></div>
+        <div class="result-message" id="resultMessage"></div>
+        <div class="heat-wrap" aria-label="مؤشر مستوى الحوكمة">
+          <div class="heat-track"><span class="heat-pointer" id="heatPointer"></span></div>
+          <div class="heat-labels"><span>خطر عال</span><span>حوكمة متقدمة</span></div>
+        </div>
+      </div>
+
+      <div class="result-grid">
+        <div class="panel"><h3>أهم المخاطر</h3><div class="clean-list" id="risks"></div></div>
+        <div class="panel"><h3>أقوى الجوانب</h3><div class="clean-list" id="strengths"></div></div>
+      </div>
+
+      <div class="section-title"><span>المحاور السبعة</span></div>
+      <div class="axes" id="axesResults"></div>
+
+      <div class="section-title"><span>أولويات التدخل</span></div>
+      <div class="recs" id="recommendations"></div>
+
+
+      <div class="tools">
+        <button class="tool" onclick="window.print()"><i class="fa-solid fa-file-pdf"></i> حفظ التقرير PDF</button>
+        <button class="tool" id="shareBtn"><i class="fa-solid fa-share-nodes"></i> مشاركة النتيجة</button>
+        <button class="tool" id="restartBtn"><i class="fa-solid fa-rotate-right"></i> إعادة الفحص</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap footerin">
+    <span class="handle">@almohammdin</span>
+    <div class="social">
+      <a href="https://x.com/almohammdin" target="_blank" rel="noopener" aria-label="X"><i class="fa-brands fa-x-twitter"></i></a>
+      <a href="https://www.linkedin.com/in/almohammdin/" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+      <a href="https://www.snapchat.com/@almohammdin" target="_blank" rel="noopener" aria-label="Snapchat"><i class="fa-brands fa-snapchat"></i></a>
+      <a href="https://www.tiktok.com/@almohammdin" target="_blank" rel="noopener" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+    </div>
+    <div class="copy">© 2026 نايف المحمدي · أداة استرشادية لا تغني عن الاستشارة المتخصصة عند الحاجة</div>
+  </div>
+</footer>
+
+<script>
+const AXES=[
+{id:1,weight:.18,title:'حوكمة الشركاء والملكية',desc:'وضوح الحقوق والملكية وآليات التخارج وحل النزاعات.',questions:[
+['هل يوجد اتفاقية شراكة أو عقد ملكية مكتوب وموثق رسميا؟',['نعم، اتفاقية مكتوبة وموثقة رسميا','يوجد اتفاق شفهي أو مكتوب غير رسمي','لا يوجد أي اتفاق موثق'],['', '', 'غياب اتفاقية موثقة خطر جوهري']],
+['هل نسب الملكية ومساهمة كل شريك محددة بالأرقام ومتفق عليها؟',['نعم، محددة بالأرقام وموثقة','متفق عليها شفهيا لكن غير مكتوبة','غير محددة أو غير واضحة'],['','','نسب الملكية غير موثقة']],
+['هل توجد آلية واضحة لتخارج شريك أو دخول شريك جديد؟',['نعم، موثقة في الاتفاقية','متفق عليها بشكل عام لكن غير مكتوبة','لا توجد آلية محددة للتخارج'],['','','غياب آلية تخارج الشركاء']],
+['هل يوجد آلية واضحة لحل النزاعات بين الشركاء؟',['نعم، موثقة بتحكيم أو وساطة أو بند قانوني','الاتفاق على التراضي شفهيا','لا توجد آلية لحل النزاع'],['','','لا آلية لحل نزاعات الشركاء']]
+]},
+{id:2,weight:.18,title:'الحوكمة المالية وفصل الذمم',desc:'فصل المال الشخصي عن التجاري وضبط الصرف والشفافية المالية.',questions:[
+['هل يوجد حساب بنكي منفصل تماما لأموال المشروع؟',['نعم، حساب مستقل باسم المنشأة','حساب مشترك أو يستخدم أحيانا للأغراض الشخصية','لا يوجد فصل والأموال مختلطة'],['','','الأموال الشخصية والتجارية مختلطة']],
+['هل صلاحيات الصرف وحدوده واضحة ومتفق عليها؟',['نعم، محددة بمبالغ وتحتاج موافقة لمبالغ معينة','غير رسمية لكن هناك تفاهم بين الشركاء','لا توجد ضوابط للصرف'],['','','غياب ضوابط الصرف المالي']],
+['هل تعد تقارير مالية دورية يطلع عليها الشركاء؟',['نعم، تقارير منتظمة شهرية أو ربعية','أحيانا أو عند الطلب فقط','لا توجد تقارير مالية دورية'],['','','لا شفافية مالية دورية بين الشركاء']]
+]},
+{id:3,weight:.14,title:'الصلاحيات واتخاذ القرار',desc:'وضوح من يقرر ماذا وكيف تعتمد القرارات الجوهرية.',questions:[
+['هل صلاحيات كل شريك أو مدير محددة ومعروفة للجميع؟',['نعم، مكتوبة ومحددة بوضوح','معروفة بالاتفاق لكن غير مكتوبة','غير محددة أو يسيطر شخص واحد دون قيود'],['','','الصلاحيات غير محددة أو مركزة بشخص واحد']],
+['هل توجد آلية للقرارات الكبيرة مثل التوسع والعقود والتمويل؟',['نعم، تحتاج موافقة الجميع أو أغلبية','يستشار الشركاء لكن ليس شرطا','شخص واحد يقرر كل شيء دون رجوع'],['','','غياب آلية اتخاذ القرارات الكبيرة']],
+['هل يوجد اجتماع دوري رسمي بين الشركاء أو المسؤولين؟',['نعم، اجتماعات منتظمة وموثقة','اجتماعات غير منتظمة حسب الحاجة','لا توجد اجتماعات رسمية'],['','','لا اجتماعات دورية بين الشركاء']]
+]},
+{id:4,weight:.14,title:'العقود والتوثيق والامتثال',desc:'الحماية القانونية عبر العقود والتراخيص والملكية الفكرية.',questions:[
+['هل عقود المشروع مع الموردين والعملاء والموظفين مكتوبة؟',['نعم، جميع العقود مكتوبة وموقعة','بعض العقود مكتوبة وبعضها شفهي','معظم الاتفاقيات شفهية'],['','','معظم عقود المشروع شفهية وغير موثقة']],
+['هل تراخيص المشروع وسجلاته التجارية سارية ومحدثة؟',['نعم، كاملة ومحدثة','معظمها سار لكن بعضها يحتاج تجديد','غير متابعة أو منتهية الصلاحية'],['','','تراخيص المشروع غير محدثة']],
+['هل الملكية الفكرية مثل العلامة والاسم التجاري مسجلة باسم المنشأة؟',['نعم، مسجلة ومحمية باسم المنشأة','مسجل الاسم لكن بقية العناصر غير محمية','غير مسجلة أو مسجلة بالاسم الشخصي'],['','','الملكية الفكرية غير محمية قانونيا']]
+]},
+{id:5,weight:.12,title:'التشغيل والإجراءات',desc:'مدى اعتماد العمل على إجراءات واضحة بدلا من المعرفة الشخصية فقط.',questions:[
+['هل يوجد توصيف واضح لمسؤوليات كل موظف أو شريك؟',['نعم، مكتوب ومحدد بوضوح','واضح بالاتفاق لكن غير مكتوب','غير محدد أو تتداخل المسؤوليات'],['','','المسؤوليات التشغيلية غير محددة']],
+['هل يوجد توثيق للعمليات الأساسية في المشروع؟',['نعم، إجراءات تشغيلية موثقة','موثقة جزئيا أو في مرحلة الإعداد','كل شيء في رأس صاحب المشروع'],['','','عمليات المشروع غير موثقة']]
+]},
+{id:6,weight:.14,title:'الاستمرارية وتقليل الاعتماد',desc:'قدرة المشروع على الاستمرار والبيع أو التوريث دون الاعتماد على شخص واحد.',questions:[
+['هل يمكن للمشروع الاستمرار لأسابيع بغياب أي شخص محوري؟',['نعم، يوجد بديل أو فريق يغطي','يستمر بصعوبة مع بعض الإرباك','المشروع يتوقف بغياب شخص واحد'],['','','المشروع يتوقف بغياب شخص محوري واحد']],
+['هل يمكن بيع المشروع لطرف آخر بشكل عملي الآن؟',['نعم، مرتب وجاهز للبيع أو الاستمرار','يحتاج إعدادا وتجهيزا قبل البيع','غير قابل للبيع ويعتمد كليا على المؤسس'],['','','المشروع غير قابل للبيع أو التوريث']],
+['هل الورثة أو الشركاء يعلمون بتفاصيل المشروع الجوهرية؟',['نعم، موثق ومحفوظ ويعلمون','يعلمون جزئيا','المعلومات حكر على شخص واحد'],['','','تفاصيل المشروع محفوظة عند شخص واحد فقط']]
+]},
+{id:7,weight:.10,title:'النزاعات والتخارج والعائلة',desc:'الاستعداد للخلاف والوفاة والعجز والتخارج وتداخل العلاقات العائلية.',questions:[
+['هل ناقشتم كشركاء ماذا يحدث في حال وفاة أو عجز أحدكم؟',['نعم، مناقش وموثق','تمت المناقشة لكن غير موثقة','لم يناقش هذا الموضوع قط'],['','','لم تناقش سيناريوهات الوفاة أو العجز']],
+['إذا كان يوجد أقارب في المشروع، هل علاقتهم التجارية منفصلة عن العلاقة العائلية؟',['نعم، التجارة كتجارة والعائلة كعائلة','أحيانا تتداخل مع وعي بذلك','العلاقة العائلية تتحكم في القرارات التجارية'],['','','اختلاط العلاقات العائلية والتجارية في القرارات']],
+['هل يوجد تفاهم مسبق على طريقة تقييم المشروع عند تخارج أحد الشركاء؟',['نعم، محدد في الاتفاقية','هناك تفاهم عام غير مكتوب','لا يوجد أي تفاهم حول التقييم'],['','','لا آلية لتقييم المشروع عند التخارج']]
+]}];
+
+const RECS={
+1:['وثق اتفاقية الشركاء قبل أي توسع أو دخول ممول','حدد الملكية، القرار، التخارج، وحل النزاع في وثيقة واضحة.'],
+2:['افصل المال الشخصي عن التجاري','حساب مستقل وصلاحيات صرف وتقارير دورية هي الحد الأدنى للشفافية.'],
+3:['اعتمد مصفوفة صلاحيات واضحة','حدد من يقرر، وما الذي يحتاج موافقة، ووثق القرارات الجوهرية.'],
+4:['راجع العقود والتراخيص والملكية الفكرية','كل اتفاق أو أصل غير موثق يزيد الانكشاف عند النزاع أو التوسع.'],
+5:['حول المعرفة إلى إجراءات تشغيل','وثق العمليات والمسؤوليات حتى لا يبقى العمل معتمدا على الذاكرة الشخصية.'],
+6:['قلل الاعتماد على الشخص المحوري','ابن بدائل وتفويضات ومعلومات محفوظة تسمح باستمرار المشروع دون فرد واحد.'],
+7:['اتفقوا على سيناريوهات الخلاف والتخارج','ناقشوا الوفاة والعجز والتقييم والتخارج قبل أن تتحول إلى واقعة ضاغطة.']
+};
+const LEVELS=[
+{min:85,label:'حوكمة متقدمة',msg:'القاعدة قوية. ركز على المراجعة الدورية والمحافظة على جودة التوثيق.'},
+{min:70,label:'حوكمة جيدة',msg:'الوضع جيد إجمالا، مع فجوات محددة تستحق المعالجة قبل التوسع.'},
+{min:50,label:'حوكمة تحتاج تعزيز',msg:'الأساس موجود لكن عدة ثغرات قد تظهر بوضوح عند الضغط أو الخلاف.'},
+{min:30,label:'حوكمة ضعيفة',msg:'توجد فجوات جوهرية تحتاج معالجة مرتبة وقريبة.'},
+{min:0,label:'انكشاف مرتفع',msg:'الأولوية الآن لبناء الأساس: توثيق، صلاحيات، فصل مالي واستمرارية.'}
+];
+
+let state={axis:0,answers:{}};
+const $=s=>document.querySelector(s);
+const views=['home','quiz','result'];
+function show(id){views.forEach(v=>$('#'+v).classList.toggle('active',v===id));window.scrollTo({top:0,behavior:'smooth'})}
+function axisAnswered(a){return a.questions.every((_,i)=>state.answers[`${a.id}-${i}`]!==undefined)}
+function totalQuestions(){return AXES.reduce((n,a)=>n+a.questions.length,0)}
+function answeredCount(){return Object.keys(state.answers).length}
+function updateProgress(){const p=Math.round(answeredCount()/totalQuestions()*100);$('#progressBar').style.width=p+'%'}
+function renderAxis(){
+  const a=AXES[state.axis];
+  $('#axisKicker').textContent=`المحور ${state.axis+1} من ${AXES.length}`;
+  $('#axisTitle').textContent=a.title;$('#axisDesc').textContent=a.desc;
+  $('#questions').innerHTML=a.questions.map((q,i)=>{
+    const key=`${a.id}-${i}`,sel=state.answers[key];
+    return `<div class="qcard"><div class="qhead"><div class="qnum">${i+1}</div><div class="qtext">${q[0]}</div></div>
+      <div class="choices">${q[1].map((txt,ci)=>`<label class="choice ${sel===ci?'selected':''}">
+      <input type="radio" name="${key}" value="${ci}" ${sel===ci?'checked':''}>
+      <span class="radio"></span><span>${txt}</span></label>`).join('')}</div></div>`
+  }).join('');
+  document.querySelectorAll('.choice input').forEach(input=>input.addEventListener('change',e=>{
+    const key=e.target.name;state.answers[key]=Number(e.target.value);
+    document.querySelectorAll(`input[name="${key}"]`).forEach(x=>x.closest('.choice').classList.toggle('selected',x.checked));
+    updateProgress();updateNext();
+  }));
+  $('#backBtn').textContent=state.axis===0?'الرئيسية':'السابق';
+  $('#nextBtn').textContent=state.axis===AXES.length-1?'عرض النتيجة':'التالي';
+  $('#counter').textContent=`تمت الإجابة عن ${answeredCount()} من ${totalQuestions()} سؤال`;
+  updateNext();updateProgress();
+}
+function updateNext(){$('#nextBtn').disabled=!axisAnswered(AXES[state.axis])}
+function scoreData(){
+  let overall=0;const axes=[];const risks=[];const strengths=[];
+  AXES.forEach(a=>{
+    let pts=0,max=a.questions.length*3;
+    a.questions.forEach((q,i)=>{
+      const ci=state.answers[`${a.id}-${i}`];
+      const val=ci===0?3:ci===1?1.5:0;pts+=val;
+      if(ci===2&&q[2][2])risks.push({axis:a.id,text:q[2][2]});
+      if(ci===0)strengths.push({axis:a.id,text:q[0]});
+    });
+    const pct=Math.round(pts/max*100);axes.push({...a,pct});overall+=pct*a.weight;
+  });
+  return {overall:Math.round(overall),axes,risks,strengths}
+}
+function renderResult(){
+  const d=scoreData(),level=LEVELS.find(l=>d.overall>=l.min);
+  $('#score').textContent=d.overall;$('#classification').textContent=level.label;$('#resultMessage').textContent=level.msg;
+  const sorted=[...d.axes].sort((a,b)=>a.pct-b.pct);
+  const r=d.risks.slice(0,3);
+  $('#risks').innerHTML=(r.length?r.map(x=>`<div class="clean-item risk"><i class="fa-solid fa-circle"></i><span>${x.text}</span></div>`):'<div class="clean-item strength"><i class="fa-solid fa-circle"></i><span>لا توجد إشارات حمراء جوهرية من إجاباتك الحالية.</span></div>').join('');
+  const strong=sorted.slice().reverse().slice(0,3);
+  $('#strengths').innerHTML=strong.map(x=>`<div class="clean-item strength"><i class="fa-solid fa-circle"></i><span>${x.title} — ${x.pct}%</span></div>`).join('');
+  $('#axesResults').innerHTML=sorted.slice().reverse().map(a=>`<div class="axisrow"><div class="axistop"><span class="axisname">${a.title}</span><span class="axispct">${a.pct}%</span></div><div class="bar"><i data-w="${a.pct}"></i></div></div>`).join('');
+  const weak=sorted.slice(0,3);
+  $('#recommendations').innerHTML=weak.map((a,i)=>`<div class="rec"><div class="recnum">${i+1}</div><div><b>${RECS[a.id][0]}</b><p>${RECS[a.id][1]}</p></div></div>`).join('');
+  $('#heatPointer').style.left=d.overall+'%';
+  requestAnimationFrame(()=>document.querySelectorAll('.bar i').forEach((b,i)=>setTimeout(()=>b.style.width=b.dataset.w+'%',Math.min(i*45,260))));
+  updateProgress();show('result');
+}
+$('#startBtn').onclick=()=>{state={axis:0,answers:{}};renderAxis();show('quiz')};
+$('#backBtn').onclick=()=>{if(state.axis===0){show('home');return}state.axis--;renderAxis();window.scrollTo({top:0,behavior:'smooth'})};
+$('#nextBtn').onclick=()=>{if(!axisAnswered(AXES[state.axis]))return;if(state.axis<AXES.length-1){state.axis++;renderAxis();window.scrollTo({top:0,behavior:'smooth'})}else renderResult()};
+$('#restartBtn').onclick=()=>{if(confirm('هل تريد بدء فحص جديد؟')){state={axis:0,answers:{}};updateProgress();show('home')}};
+$('#shareBtn').onclick=async()=>{
+  const d=scoreData(),text=`نتيجتي في فحص صحة الحوكمة: ${d.overall}/100\n${location.href}`;
+  try{if(navigator.share)await navigator.share({title:'فحص صحة الحوكمة',text,url:location.href});else{await navigator.clipboard.writeText(text);$('#shareBtn').innerHTML='<i class="fa-solid fa-check"></i> تم نسخ النتيجة';setTimeout(()=>$('#shareBtn').innerHTML='<i class="fa-solid fa-share-nodes"></i> مشاركة النتيجة',1600)}}catch(e){}
+};
+updateProgress();
+</script>
+</body>
+</html>
